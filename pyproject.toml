@@ -1,17 +1,22 @@
 [tool.poetry]
 name = "wcpy"
 version = "0.1.0"
-description = ""
+description = "wc command made with Python."
 authors = ["TinySquid <tinysquid.git@pm.me>"]
 license = "MIT"
 readme = "README.md"
-
-[tool.poetry.dependencies]
-python = "^3.12.4"
+repository = "https://github.com/TinySquid/wcpy"
+documentation = "https://github.com/TinySquid/wcpy"
 
 [tool.poetry.scripts]
 wcpy = "wcpy.wcpy:main"
 
+[tool.poetry.dependencies]
+python = "^3.12.4"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.urls]
+issues = "https://github.com/TinySquid/wcpy/issues"
