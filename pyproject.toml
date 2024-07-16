@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "wcpy"
+version = "0.1.0"
+description = ""
+authors = ["TinySquid <tinysquid.git@pm.me>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12.4"
+
+[tool.poetry.scripts]
+wcpy = "wcpy.wcpy:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
