@@ -9,7 +9,7 @@ repository = "https://github.com/TinySquid/wcpy"
 documentation = "https://github.com/TinySquid/wcpy"
 
 [tool.poetry.scripts]
-wcpy = "wcpy.wcpy:main"
+wcpy = "wcpy.cli:cli"
 
 [tool.poetry.dependencies]
 python = "^3.12.4"
