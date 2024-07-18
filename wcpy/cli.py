@@ -1,5 +1,4 @@
 from argparse import ArgumentParser
-from math import inf as infinity
 
 
 def get_parsed_args():
@@ -34,18 +33,19 @@ def get_parsed_args():
 def get_file_stats(file):
     with open(file, "r", encoding="utf-8") as f:
         contents = f.read()
-        chars = bytes = len(contents)
-        words = len(contents.split(" "))
 
-        lines = 0
-        max_line_length = -infinity
+        chars = bytes = len(contents)
+
+        words = len(contents.split())
+
+        lines = contents.count("\n") + contents.count("\r\n")
+
+        max_line_length = 0
         for line in contents.splitlines():
             line_length = len(line)
 
             if line_length > max_line_length:
                 max_line_length = line_length
-
-            lines += 1
 
         return {
             "lines": lines,
@@ -57,20 +57,68 @@ def get_file_stats(file):
         }
 
 
+def format_stats_line(stats, args):
+    stat_line = ""
+
+    if args.lines:
+        stat_line += f"{stats["lines"]}"
+    if args.words:
+        stat_line += f" {stats["words"]}"
+    if args.chars:
+        stat_line += f" {stats["chars"]}"
+    if args.bytes:
+        stat_line += f" {stats["bytes"]}"
+    if args.max_line_length:
+        stat_line += f" {stats["max_line_length"]}"
+
+    if "file_name" in stats:
+        stat_line += f" {stats["file_name"]}\n"
+    else:
+        stat_line += " total"
+
+    return stat_line
+
+
+def sum_total_stats(stats):
+    totals = {"lines": 0, "words": 0, "chars": 0, "bytes": 0, "max_line_length": 0}
+
+    for s in stats:
+        totals["lines"] += s["lines"]
+        totals["words"] += s["words"]
+        totals["chars"] += s["chars"]
+        totals["bytes"] += s["bytes"]
+
+        if s["max_line_length"] > totals["max_line_length"]:
+            totals["max_line_length"] = s["max_line_length"]
+
+    return totals
+
+
+def pretty_print_stats(stats, args):
+    output = ""
+
+    for s in stats:
+        stat_line = format_stats_line(s, args)
+        output += stat_line
+
+    if len(stats) > 1:
+        totals = sum_total_stats(stats)
+        output += format_stats_line(totals, args)
+
+    print(output)
+
+
 def cli():
     try:
         args = get_parsed_args()
 
         if args.files:
-            output = get_file_stats(args.files[0])
-            pretty_print_string = ""
+            stats = []
 
-            for key in output:
-                pretty_print_string += f" {output[key]}"
+            for file in args.files:
+                stats.append(get_file_stats(file))
 
-            pretty_print_string.rstrip()
-
-            print(pretty_print_string)
+            pretty_print_stats(stats, args)
     except Exception as e:
         print(e)
         exit(1)
