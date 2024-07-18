@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+from math import inf as infinity
 
 
 def get_parsed_args():
@@ -30,13 +31,49 @@ def get_parsed_args():
     return parser.parse_args()
 
 
+def get_file_stats(file):
+    with open(file, "r", encoding="utf-8") as f:
+        contents = f.read()
+        chars = bytes = len(contents)
+        words = len(contents.split(" "))
+
+        lines = 0
+        max_line_length = -infinity
+        for line in contents.splitlines():
+            line_length = len(line)
+
+            if line_length > max_line_length:
+                max_line_length = line_length
+
+            lines += 1
+
+        return {
+            "lines": lines,
+            "words": words,
+            "chars": chars,
+            "bytes": bytes,
+            "max_line_length": max_line_length,
+            "file_name": file,
+        }
+
+
 def cli():
     try:
         args = get_parsed_args()
 
-        print(args)
+        if args.files:
+            output = get_file_stats(args.files[0])
+            pretty_print_string = ""
+
+            for key in output:
+                pretty_print_string += f" {output[key]}"
+
+            pretty_print_string.rstrip()
+
+            print(pretty_print_string)
     except Exception as e:
         print(e)
+        exit(1)
 
 
 if __name__ == "__main__":
