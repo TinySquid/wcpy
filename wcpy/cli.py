@@ -1,5 +1,7 @@
 from argparse import ArgumentParser
 
+from tabulate import tabulate
+
 
 def get_parsed_args():
     parser = ArgumentParser(
@@ -47,6 +49,7 @@ def get_file_stats(file):
             if line_length > max_line_length:
                 max_line_length = line_length
 
+        # return [lines, words, chars, bytes, max_line_length, file]
         return {
             "lines": lines,
             "words": words,
@@ -57,24 +60,24 @@ def get_file_stats(file):
         }
 
 
-def format_stats_line(stats, args):
-    stat_line = ""
+def format_stats_line_to_args(stats, args):
+    stat_line = []
 
     if args.lines:
-        stat_line += f"{stats["lines"]}"
+        stat_line.append(stats["lines"])
     if args.words:
-        stat_line += f" {stats["words"]}"
+        stat_line.append(stats["words"])
     if args.chars:
-        stat_line += f" {stats["chars"]}"
+        stat_line.append(stats["chars"])
     if args.bytes:
-        stat_line += f" {stats["bytes"]}"
+        stat_line.append(stats["bytes"])
     if args.max_line_length:
-        stat_line += f" {stats["max_line_length"]}"
+        stat_line.append(stats["max_line_length"])
 
     if "file_name" in stats:
-        stat_line += f" {stats["file_name"]}\n"
+        stat_line.append(stats["file_name"])
     else:
-        stat_line += " total"
+        stat_line.append("total")
 
     return stat_line
 
@@ -95,17 +98,17 @@ def sum_total_stats(stats):
 
 
 def pretty_print_stats(stats, args):
-    output = ""
+    table = []
 
     for s in stats:
-        stat_line = format_stats_line(s, args)
-        output += stat_line
+        stat_line = format_stats_line_to_args(s, args)
+        table.append(stat_line)
 
     if len(stats) > 1:
         totals = sum_total_stats(stats)
-        output += format_stats_line(totals, args)
+        table.append(format_stats_line_to_args(totals, args))
 
-    print(output)
+    print(tabulate(table, tablefmt="plain"))
 
 
 def cli():
