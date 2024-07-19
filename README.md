@@ -18,11 +18,11 @@ pipx will add it to the path so you can just run it with `wcpy`. See usage for m
 
 ## Development
 
-This project uses Poetry for dependency management and virtual env, black, isort, and flake8 for formatting / linting, and finally Pytest for testing.
+This project uses Poetry for dependency management (and virtual env), black, isort, and flake8 for formatting / linting, and finally Pytest for testing.
 
 - Install dependencies with `poetry install --with dev`
 - Install pre-commit hook with `poetry run pre-commit install` to get black / isort / flake8 on commit.
-  - Recommended to setup IDE specific on-save actions to use these plugins.
+  - Recommended to setup IDE specific on-save actions to also use these plugins.
 - Run tests with `pytest`
 - Create builds with `poetry build` - will output a wheel, or you can install with `pipx install .` at the root of the project.
 
@@ -39,7 +39,8 @@ python -m wcpy somefile.txt -a -b -c
 ```
 usage: wcpy [-h] [-c] [-m] [-l] [--files0-from=F [FILES0_FROM=F ...]] [-L] [-w] [files ...]
 
-Print newline, word, and byte counts for each FILE, and a total line if more than one FILE is specified. A word is a non-zero-length sequence of characters delimited by white space.
+Print newline, word, character, byte counts, and max line lengths for each file provided.
+Will also show a sum total of stats if more than one file is specified.
 
 positional arguments:
   files                 a file or many files separated by a space
